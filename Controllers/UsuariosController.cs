@@ -47,22 +47,22 @@ namespace ApiTcc.Controllers
         [Produces("application/json")]
         public async Task<string> PostUsuarios(Usuarios usuario)
         {
+            if (_context.Usuarios.Any(e => e.usuario == usuario.usuario))
+            {
+                return JsonSerializer.Serialize(new Resposta(true, 2, "Este usuário já existe"));
+            }
+
             usuario.senha = Criptografia.criptografar(usuario.senha);
             _context.Usuarios.Add(usuario);
             try
             {
                 await _context.SaveChangesAsync();
-                return JsonSerializer.Serialize(new Resposta(true));
+                return JsonSerializer.Serialize(new Resposta(true, 1));
             }
             catch
             {
                 return JsonSerializer.Serialize(new Resposta(false));
             }
-        }
-
-        private bool UsuariosExists(int id)
-        {
-            return _context.Usuarios.Any(e => e.userID == id);
         }
     }
 }

@@ -13,30 +13,49 @@ namespace ApiTcc
             erro = 2,
         }
 
-        public CodigoResposta codigo { get; set; }
+        public CodigoResposta codigoProcessamento { get; set; }
+        public int codigoRetorno { get; set; }
         public string descricao { get; set; }
 
         public Resposta() { }
 
-        public Resposta(bool sucesso, string descricao) {
+        public Resposta(bool sucesso, int codigoRetorno, string descricao) {
             if (sucesso)
-                codigo = CodigoResposta.sucesso;
+            {
+                codigoProcessamento = CodigoResposta.sucesso;
+                this.codigoRetorno = codigoRetorno; 
+            }
             else
-                codigo = CodigoResposta.erro;
+                codigoProcessamento = CodigoResposta.erro;
 
             this.descricao = descricao;
+        }
+
+        public Resposta(bool sucesso, int codigoRetorno)
+        {
+            if (sucesso)
+            {
+                codigoProcessamento = CodigoResposta.sucesso;
+                this.codigoRetorno = codigoRetorno;
+                descricao = "Sucesso";
+            }
+            else
+            {
+                codigoProcessamento = CodigoResposta.erro;
+                descricao = "Ocorreu um erro";
+            }
         }
 
         public Resposta(bool sucesso)
         {
             if (sucesso)
             {
-                codigo = CodigoResposta.sucesso;
+                codigoProcessamento = CodigoResposta.sucesso;
                 descricao = "Sucesso";
             }
             else
             {
-                codigo = CodigoResposta.erro;
+                codigoProcessamento = CodigoResposta.erro;
                 descricao = "Ocorreu um erro";
             }
         }

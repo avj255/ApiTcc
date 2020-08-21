@@ -13,7 +13,6 @@ namespace ApiTcc.Retornos
             invalido = 2,
         }
 
-        public CodigoLogin codigoRespostaLogin { get; set; }
         public string nome { get; set; }
         public int administrador { get; set; }
 
@@ -23,13 +22,13 @@ namespace ApiTcc.Retornos
         {
             if (sucessoLogin)
             {
-                codigoRespostaLogin = CodigoLogin.valido;
+                codigoRetorno = (int)CodigoLogin.valido;
                 this.nome = nome;
                 this.administrador = administrador;
             }
             else
             {
-                codigoRespostaLogin = CodigoLogin.invalido;
+                codigoRetorno = (int)CodigoLogin.invalido;
 
                 if (sucessoProcessamento)
                     descricao = "Usuário ou Senha Inválidos";
