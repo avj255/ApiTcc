@@ -26,43 +26,29 @@ namespace ApiTcc.Controllers
         // GET: api/Usuarios
         [HttpGet]
         [Produces("application/json")]
-        public string GetUsuarios(Usuarios usuario)
+        public JsonResult GetUsuarios(Usuarios usuario)
         {
-            try
-            {
-                Usuarios usu = _context.Usuarios.FirstOrDefault(_usuario => _usuario.usuario == usuario.usuario && _usuario.senha == Criptografia.criptografar(usuario.senha));
-                if (usu != null)
-                   return JsonSerializer.Serialize(new RespostaLogin(true, true, usu.nome, usu.administrador));
-                else
-                   return JsonSerializer.Serialize(new RespostaLogin(true, false));
-            }
-            catch (Exception e)
-            {
-                return JsonSerializer.Serialize(new RespostaLogin(false, false));
-            }
+           Usuarios usu = _context.Usuarios.FirstOrDefault(_usuario => _usuario.usuario == usuario.usuario && _usuario.senha == Criptografia.criptografar(usuario.senha));
+           if (usu != null)
+              return new JsonResult(new RespostaLogin(true, usu.nome, usu.administrador));
+           else
+              return new JsonResult(new RespostaLogin(false));
         }
 
         // POST: api/Usuarios
         [HttpPost]
         [Produces("application/json")]
-        public async Task<string> PostUsuarios(Usuarios usuario)
+        public async Task<JsonResult> PostUsuarios(Usuarios usuario)
         {
             if (_context.Usuarios.Any(e => e.usuario == usuario.usuario))
             {
-                return JsonSerializer.Serialize(new Resposta(true, 2, "Este usuário já existe"));
+                return new JsonResult(new Resposta(2, "Este usuário já existe"));
             }
 
             usuario.senha = Criptografia.criptografar(usuario.senha);
             _context.Usuarios.Add(usuario);
-            try
-            {
-                await _context.SaveChangesAsync();
-                return JsonSerializer.Serialize(new Resposta(true, 1));
-            }
-            catch
-            {
-                return JsonSerializer.Serialize(new Resposta(false));
-            }
+            await _context.SaveChangesAsync();
+            return new JsonResult(new Resposta(1, "Sucesso"));
         }
     }
 }

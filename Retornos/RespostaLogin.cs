@@ -18,20 +18,19 @@ namespace ApiTcc.Retornos
 
         public RespostaLogin(){}
 
-        public RespostaLogin(bool sucessoProcessamento, bool sucessoLogin, string nome = null, int administrador = 0) : base (sucessoProcessamento)
+        public RespostaLogin(bool sucessoLogin, string nome = null, int administrador = 0)
         {
             if (sucessoLogin)
             {
                 codigoRetorno = (int)CodigoLogin.valido;
                 this.nome = nome;
                 this.administrador = administrador;
+                descricao = "Sucesso";
             }
             else
             {
                 codigoRetorno = (int)CodigoLogin.invalido;
-
-                if (sucessoProcessamento)
-                    descricao = "Usuário ou Senha Inválidos";
+                descricao = "Usuário ou Senha Inválidos";
             }
         }
     }

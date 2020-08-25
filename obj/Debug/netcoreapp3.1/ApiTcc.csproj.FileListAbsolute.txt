@@ -142,4 +142,7 @@ C:\Users\André\source\repos\ApiTcc\ApiTcc\bin\Debug\netcoreapp3.1\ru\Microsoft.
 C:\Users\André\source\repos\ApiTcc\ApiTcc\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\André\source\repos\ApiTcc\ApiTcc\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\André\source\repos\ApiTcc\ApiTcc\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\André\source\repos\ApiTcc\ApiTcc\obj\Debug\netcoreapp3.1\ApiTcc.csprojAssemblyReference.cache
+C:\Users\André\source\repos\ApiTcc\ApiTcc\bin\Debug\netcoreapp3.1\Castle.Core.dll
+C:\Users\André\source\repos\ApiTcc\ApiTcc\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Proxies.dll
 C:\Users\André\source\repos\ApiTcc\ApiTcc\obj\Debug\netcoreapp3.1\ApiTcc.MvcApplicationPartsAssemblyInfo.cache

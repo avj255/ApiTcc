@@ -1,0 +1,104 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ApiTcc.Data;
+using ApiTcc.Entidades;
+
+namespace ApiTcc.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PratosController : ControllerBase
+    {
+        private readonly ApiTccContext _context;
+
+        public PratosController(ApiTccContext context)
+        {
+            _context = context;
+        }
+
+        // GET: api/Pratos
+        [HttpGet]
+        public JsonResult GetPratos()
+        {
+            var pratos = _context.Pratos;
+            foreach (Pratos prato in pratos)
+            {
+                prato.Ingredientes = GetIngredientes(prato);
+            }
+
+            return new JsonResult(pratos);
+        }
+
+        // GET: api/Pratos/5
+        [HttpGet("{id}")]
+        public async Task<JsonResult> GetPratos(int id)
+        {
+            var pratos = await _context.Pratos.FindAsync(id);
+            pratos.Ingredientes = GetIngredientes(pratos);
+
+            return new JsonResult(pratos);
+        }
+
+        // POST: api/Pratos
+        [HttpPost]
+        public async Task<JsonResult> PostPratos(Pratos pratos)
+        {
+            var _prato = _context.Pratos.FirstOrDefault(e => e.nome == pratos.nome);
+
+            if (_prato != null)
+            {
+                _prato.nome = pratos.nome;
+                _prato.valor = pratos.valor;
+                _prato.modopreparo = pratos.modopreparo;
+                _prato.video = pratos.video;
+                _prato.foto = pratos.foto;
+            } else
+            {
+                _context.Pratos.Add(pratos);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return new JsonResult(new Resposta(1, "Sucesso"));
+        }
+
+        // DELETE: api/Pratos/5
+        [HttpDelete("{id}")]
+        public async Task<JsonResult> DeletePratos(int id)
+        {
+            var pratos = await _context.Pratos.FindAsync(id);
+            if (pratos == null)
+            {
+                return new JsonResult(new Resposta(2, "Prato não encontrado"));
+            }
+
+            _context.Pratos.Remove(pratos);
+            await _context.SaveChangesAsync();
+
+            return new JsonResult(new Resposta(1, "Sucesso"));
+        }
+
+        private bool PratosExists(int id)
+        {
+            return _context.Pratos.Any(e => e.pratoID == id);
+        }
+
+        private List<Ingredientes> GetIngredientes(Pratos prato)
+        {
+            List<Ingredientes> ingredientes = new List<Ingredientes>();
+            if (prato.pratos_Ingredientes != null)
+            {
+                foreach (Pratos_Ingredientes pi in prato.pratos_Ingredientes)
+                {
+                    ingredientes.Add(_context.Ingredientes.Find(pi.ingredienteID));
+                }
+            }
+            return ingredientes;
+        }
+    }
+}

@@ -29,8 +29,9 @@ namespace ApiTcc
         {
             services.AddControllers();
 
-            services.AddDbContext<ApiTccContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("ApiTccContext")));
+            services.AddDbContext<ApiTccContext>(options => options
+                    .UseLazyLoadingProxies()
+                    .UseSqlServer(Configuration.GetConnectionString("ApiTccContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
