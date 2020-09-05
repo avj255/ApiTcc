@@ -23,8 +23,9 @@ namespace ApiTcc.Controllers
             _context = context;
         }
 
-        // GET: api/Usuarios
-        [HttpGet]
+
+        [HttpPost]
+        [Route("Login")]
         [Produces("application/json")]
         public JsonResult GetUsuarios(Usuarios usuario)
         {
@@ -35,8 +36,8 @@ namespace ApiTcc.Controllers
               return new JsonResult(new RespostaLogin(false));
         }
 
-        // POST: api/Usuarios
         [HttpPost]
+        [Route("Cadastro")]
         [Produces("application/json")]
         public async Task<JsonResult> PostUsuarios(Usuarios usuario)
         {
