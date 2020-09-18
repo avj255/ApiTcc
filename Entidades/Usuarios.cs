@@ -19,5 +19,7 @@ namespace ApiTcc
         public string cnpj { get; set; }
         public string cpf { get; set; }
         public int administrador { get; set; }
+        [NotMapped]
+        public string novaSenha { get; set; }
     }
 }

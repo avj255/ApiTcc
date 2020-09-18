@@ -13,16 +13,18 @@ namespace ApiTcc.Retornos
             invalido = 2,
         }
 
+        public string usuario { get; set; }
         public string nome { get; set; }
         public int administrador { get; set; }
 
         public RespostaLogin(){}
 
-        public RespostaLogin(bool sucessoLogin, string nome = null, int administrador = 0)
+        public RespostaLogin(bool sucessoLogin, string usuario = null, string nome = null, int administrador = 0)
         {
             if (sucessoLogin)
             {
                 codigoRetorno = (int)CodigoLogin.valido;
+                this.usuario = usuario;
                 this.nome = nome;
                 this.administrador = administrador;
                 descricao = "Sucesso";
