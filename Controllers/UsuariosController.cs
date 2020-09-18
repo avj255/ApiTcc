@@ -58,6 +58,18 @@ namespace ApiTcc.Controllers
         }
 
         [HttpPost]
+        [Route("AlterarSenha")]
+        [Produces("application/json")]
+        public async Task<JsonResult> AlterarSenha(Usuarios usuario)
+        {
+            Usuarios _usuario = _context.Usuarios.FirstOrDefault(x => x.usuario == usuario.usuario);
+            _usuario.senha = Criptografia.criptografar(usuario.senha);
+
+            await _context.SaveChangesAsync();
+            return new JsonResult(new Resposta(1, "Sucesso"));
+        }
+
+        [HttpPost]
         [Route("RedefinirSenha")]
         [Produces("application/json")]
         public async Task<JsonResult> RedefinirSenha(Usuarios usuario)
