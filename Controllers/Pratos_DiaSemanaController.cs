@@ -33,7 +33,13 @@ namespace ApiTcc.Controllers
         [Produces("application/json")]
         public async Task<ActionResult<IEnumerable<Pratos_DiaSemana>>> GetPratos_Dia(int id)
         {
-            return await _context.Pratos_DiaSemana.Where(p => p.diasemana == id).ToListAsync();
+            var pds = _context.Pratos_DiaSemana.Where(p => p.diasemana == id);
+            foreach (Pratos_DiaSemana pd in pds)
+            {
+                pd.prato.Ingredientes = GetIngredientes(pd.prato);
+            }
+
+            return await pds.ToListAsync();
         }
 
         [HttpGet]
@@ -54,6 +60,19 @@ namespace ApiTcc.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPratos_DiaSemana", new { id = pratos_DiaSemana.idpratodia }, pratos_DiaSemana);
+        }
+
+        private List<Ingredientes> GetIngredientes(Pratos prato)
+        {
+            List<Ingredientes> ingredientes = new List<Ingredientes>();
+            if (prato.pratos_Ingredientes != null)
+            {
+                foreach (Pratos_Ingredientes pi in prato.pratos_Ingredientes)
+                {
+                    ingredientes.Add(_context.Ingredientes.Find(pi.ingredienteID));
+                }
+            }
+            return ingredientes;
         }
     }
 }
