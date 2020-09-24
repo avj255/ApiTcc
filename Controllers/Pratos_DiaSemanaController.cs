@@ -29,6 +29,13 @@ namespace ApiTcc.Controllers
             return await _context.Pratos_DiaSemana.ToListAsync();
         }
 
+        [HttpGet("{id}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<IEnumerable<Pratos_DiaSemana>>> GetPratos_Dia(int id)
+        {
+            return await _context.Pratos_DiaSemana.Where(p => p.diasemana == id).ToListAsync();
+        }
+
         [HttpGet]
         [Route("PratoDia")]
         [Produces("application/json")]
