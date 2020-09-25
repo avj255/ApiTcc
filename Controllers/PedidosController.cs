@@ -44,18 +44,8 @@ namespace ApiTcc.Controllers
         public async Task<JsonResult> PostPedidos(Pedidos pedidos)
         {
             var _pedidos = _context.Pedidos.FirstOrDefault(e => e.usuario == pedidos.usuario && e.prato == pedidos.prato && e.mesa == pedidos.mesa);
-
-            if (_pedidos != null)
-            {
-                _pedidos.valor = pedidos.valor;
-                _pedidos.mesa = pedidos.mesa;
-                _pedidos.prato = pedidos.prato;
-                _pedidos.usuario = pedidos.usuario;
-            }
-            else
-            {
-                _context.Pedidos.Add(pedidos);
-            }
+        
+            _context.Pedidos.Add(pedidos);
 
             await _context.SaveChangesAsync();
 
