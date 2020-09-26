@@ -32,9 +32,15 @@ namespace ApiTcc.Controllers
 
         // GET: api/Pedidos/5
         [HttpGet("{id}")]
-        public async Task<JsonResult> GetPedidos(int id)
+        public JsonResult GetPedidos(int id)
         {
-            var pedidos = await _context.Pedidos.FindAsync(id);
+            var pedidos = _context.Pedidos.Where(p => p.usuario == id).ToList();
+            foreach (Pedidos pedido in pedidos)
+            {
+                pedido.pratoObj = _context.Pratos.First(p => p.pratoID == pedido.prato);
+                pedido.pratoObj.foto = null;
+                pedido.pratoObj.video = null;
+            }
 
             return new JsonResult(pedidos);
         }
@@ -43,8 +49,6 @@ namespace ApiTcc.Controllers
         [HttpPost]
         public async Task<JsonResult> PostPedidos(Pedidos pedidos)
         {
-            var _pedidos = _context.Pedidos.FirstOrDefault(e => e.usuario == pedidos.usuario && e.prato == pedidos.prato && e.mesa == pedidos.mesa);
-        
             _context.Pedidos.Add(pedidos);
 
             await _context.SaveChangesAsync();

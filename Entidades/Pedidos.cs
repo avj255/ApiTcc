@@ -20,5 +20,8 @@ namespace ApiTcc.Entidades
         public int usuario { get; set; }
         public int quantidade { get; set; }
         public int situacao { get; set; }
+
+        [NotMapped]
+        public Pratos pratoObj { get; set; }
     }
 }
