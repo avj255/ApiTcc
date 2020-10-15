@@ -47,7 +47,11 @@ namespace ApiTcc.Controllers
         [Produces("application/json")]
         public async Task<ActionResult<IEnumerable<Pratos_DiaSemana>>> GetPratos_Dia()
         {
-            int diaSemana = (int)DateTime.Now.DayOfWeek;
+            int diaSemana = (int)TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time")).DayOfWeek;
+
+            if (diaSemana == 0)
+                diaSemana = 7;
+
             return await _context.Pratos_DiaSemana.Where(p => p.diasemana == diaSemana).ToListAsync();
         }
 
