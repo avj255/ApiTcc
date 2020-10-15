@@ -34,6 +34,15 @@ namespace ApiTcc.Controllers
             return new JsonResult(pratos);
         }
 
+        // GET: api/Pratos/ListaPratos
+        [HttpGet]
+        [Route("ListaPratos")]
+        public JsonResult ListaPratos()
+        {
+            var pratos = _context.Pratos.Select(prato => new Pratos {pratoID = prato.pratoID,nome = prato.nome});
+            return new JsonResult(pratos);
+        }
+
         // GET: api/Pratos/5
         [HttpGet("{id}")]
         public async Task<JsonResult> GetPratos(int id)
