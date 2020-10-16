@@ -45,10 +45,12 @@ namespace ApiTcc.Controllers
 
         // GET: api/Pratos/5
         [HttpGet("{id}")]
-        public async Task<JsonResult> GetPratos(int id)
+        public JsonResult GetPratos(int id)
         {
-            var pratos = await _context.Pratos.FindAsync(id);
-            pratos.Ingredientes = GetIngredientes(pratos);
+            var pratos = _context.Pratos.Where(p => p.pratoID == id).ToList();
+
+            if (pratos != null && pratos.Count > 0)
+                pratos[0].Ingredientes = GetIngredientes(pratos[0]);
 
             return new JsonResult(pratos);
         }
