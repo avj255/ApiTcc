@@ -41,5 +41,7 @@ namespace ApiTcc.Data
         public DbSet<ApiTcc.Entidades.Pedidos> Pedidos { get; set; }
 
         public DbSet<ApiTcc.Entidades.Pratos_DiaSemana> Pratos_DiaSemana { get; set; }
+
+        public DbSet<ApiTcc.Entidades.Pratos_Ingredientes> Pratos_Ingredientes { get; set; }
     }
 }
