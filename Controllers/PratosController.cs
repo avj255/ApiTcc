@@ -66,8 +66,12 @@ namespace ApiTcc.Controllers
                 _prato.nome = pratos.nome;
                 _prato.valor = pratos.valor;
                 _prato.modopreparo = pratos.modopreparo;
-                _prato.video = pratos.video;
-                _prato.foto = pratos.foto;
+
+                if (pratos.video != null)
+                  _prato.video = pratos.video;
+
+                if (pratos.foto != null)
+                    _prato.foto = pratos.foto;
             } else
             {
                 _context.Pratos.Add(pratos);
