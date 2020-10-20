@@ -72,6 +72,9 @@ namespace ApiTcc.Controllers
 
                 if (pratos.foto != null)
                     _prato.foto = pratos.foto;
+
+                _prato.pratos_Ingredientes.Clear();
+                _prato.pratos_Ingredientes = pratos.pratos_Ingredientes;
             } else
             {
                 _context.Pratos.Add(pratos);

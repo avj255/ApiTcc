@@ -10,8 +10,8 @@ namespace ApiTcc.Entidades
     public class Pratos_Ingredientes
     {
         [Key, Column(Order = 0), ForeignKey("Pratos")]
-        public int pratoID { get; set; }
+        public int? pratoID { get; set; }
         [Key, Column(Order = 1), ForeignKey("Ingredientes")]
-        public int ingredienteID { get; set; }
+        public int? ingredienteID { get; set; }
     }
 }
