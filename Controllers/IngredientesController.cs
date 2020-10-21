@@ -24,7 +24,8 @@ namespace ApiTcc.Controllers
         [HttpGet]
         public JsonResult GetIngredientes()
         {
-            var ingredientes = _context.Ingredientes;
+            //var ingredientes = _context.Ingredientes;
+            var ingredientes = _context.Ingredientes.Select(i => new Ingredientes { ingredienteID = i.ingredienteID, nome = i.nome, calorias = i.calorias, peso = i.peso });
 
             return new JsonResult(ingredientes);
         }

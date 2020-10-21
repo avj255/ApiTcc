@@ -37,6 +37,8 @@ namespace ApiTcc.Controllers
             foreach (Pratos_DiaSemana pd in pds)
             {
                 pd.prato.Ingredientes = GetIngredientes(pd.prato);
+                pd.prato.foto = Convert.ToBase64String(pd.prato.fotobin);
+                pd.prato.fotobin = null;
             }
 
             return await pds.ToListAsync();
