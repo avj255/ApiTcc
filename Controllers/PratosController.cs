@@ -110,7 +110,7 @@ namespace ApiTcc.Controllers
         [HttpDelete("{id}")]
         public async Task<JsonResult> DeletePratos(int id)
         {
-            var pratos = await _context.Pratos.FindAsync(id);
+            var pratos = _context.Pratos.Where(p => p.pratoID == id).Include(p => p.pratos_Ingredientes).FirstOrDefault();
             if (pratos == null)
             {
                 return new JsonResult(new Resposta(2, "Prato não encontrado"));
