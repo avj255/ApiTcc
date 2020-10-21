@@ -25,7 +25,7 @@ namespace ApiTcc.Controllers
         [HttpGet]
         public JsonResult GetPratos()
         {
-            var pratos = _context.Pratos;
+            var pratos = _context.Pratos.OrderBy(p => p.nome);
             foreach (Pratos prato in pratos)
             {
                 if (prato.fotobin != null)
@@ -44,7 +44,7 @@ namespace ApiTcc.Controllers
         [Route("ListaPratos")]
         public JsonResult ListaPratos()
         {
-            var pratos = _context.Pratos.Select(prato => new Pratos {pratoID = prato.pratoID,nome = prato.nome});
+            var pratos = _context.Pratos.Select(prato => new Pratos {pratoID = prato.pratoID,nome = prato.nome}).OrderBy(p => p.nome);
             foreach (var prato in pratos)
             {
                 if (prato.fotobin != null)
