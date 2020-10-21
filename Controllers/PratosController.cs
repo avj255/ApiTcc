@@ -97,7 +97,9 @@ namespace ApiTcc.Controllers
             }
             else
             {
-                pratos.fotobin = Convert.FromBase64String(pratos.foto);
+                if (pratos.foto != null)
+                   pratos.fotobin = Convert.FromBase64String(pratos.foto);
+
                 _context.Pratos.Add(pratos);
             }
 
