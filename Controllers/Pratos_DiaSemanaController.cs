@@ -45,6 +45,19 @@ namespace ApiTcc.Controllers
         }
 
         [HttpGet]
+        [Route("PratoDiaSemImagem/{id}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<IEnumerable<Pratos>>> GetPratos_DiaSemImagem(int id)
+        {
+            var pds = _context.Pratos_DiaSemana
+                .Where(p => p.diasemana == id)
+                .Select(s => new Pratos { pratoID = s.prato.pratoID, nome = s.prato.nome, valor = s.prato.valor })
+                .OrderBy(o => o.nome);
+
+            return await pds.ToListAsync();
+        }
+
+        [HttpGet]
         [Route("PratoDia")]
         [Produces("application/json")]
         public async Task<ActionResult<IEnumerable<Pratos_DiaSemana>>> GetPratos_Dia()
@@ -60,12 +73,36 @@ namespace ApiTcc.Controllers
         // POST: api/Pratos_DiaSemana
         [HttpPost]
         [Produces("application/json")]
-        public async Task<ActionResult<Pratos_DiaSemana>> PostPratos_DiaSemana(Pratos_DiaSemana pratos_DiaSemana)
+        public async Task<JsonResult> PostPratos_DiaSemana(Pratos_DiaSemana pratos_DiaSemana)
         {
-            _context.Pratos_DiaSemana.Add(pratos_DiaSemana);
-            await _context.SaveChangesAsync();
+            var pds = _context.Pratos_DiaSemana.FirstOrDefault(p => p.diasemana == pratos_DiaSemana.diasemana && p.prato.pratoID == pratos_DiaSemana.prato.pratoID);
+            
+            if (pds == null)
+            {
+                pratos_DiaSemana.prato = _context.Pratos.FirstOrDefault(p => p.pratoID == pratos_DiaSemana.prato.pratoID);
+                _context.Pratos_DiaSemana.Add(pratos_DiaSemana);
 
-            return CreatedAtAction("GetPratos_DiaSemana", new { id = pratos_DiaSemana.idpratodia }, pratos_DiaSemana);
+                await _context.SaveChangesAsync();
+            }
+
+            return new JsonResult(new Resposta(1, "Sucesso"));
+        }
+
+        [HttpPost]
+        [Route("DesvincularPratoDiaSemana")]
+        [Produces("application/json")]
+        public async Task<JsonResult> DesvincularPrato(Pratos_DiaSemana pratos_DiaSemana)
+        {
+            var pds = _context.Pratos_DiaSemana.FirstOrDefault(p => p.diasemana == pratos_DiaSemana.diasemana && p.prato.pratoID == pratos_DiaSemana.prato.pratoID);
+
+            if (pds != null)
+            {
+                _context.Pratos_DiaSemana.Remove(pds);
+
+                await _context.SaveChangesAsync();
+            }
+
+            return new JsonResult(new Resposta(1, "Sucesso"));
         }
 
         private List<Ingredientes> GetIngredientes(Pratos prato)
