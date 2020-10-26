@@ -24,7 +24,7 @@ namespace ApiTcc.Controllers
         [HttpGet]
         public JsonResult GetIngredientes()
         {
-            var ingredientes = _context.Ingredientes;
+            var ingredientes = _context.Ingredientes.Select(i => new Ingredientes { ingredienteID = i.ingredienteID, nome = i.nome, calorias = i.calorias, peso = i.peso }).OrderBy(p => p.nome);
 
             return new JsonResult(ingredientes);
         }
@@ -33,12 +33,18 @@ namespace ApiTcc.Controllers
         [HttpPost]
         public async Task<JsonResult> PostIngredientes(Ingredientes ingredientes)
         {
-            if (_context.Ingredientes.Any(e => e.nome == ingredientes.nome))
+            var ingrediente = _context.Ingredientes.FirstOrDefault(e => e.ingredienteID == ingredientes.ingredienteID);
+
+            if (ingrediente != null)
             {
-                return new JsonResult(new Resposta(2, "Este ingrediente já existe"));
+                ingrediente.nome = ingredientes.nome;
+                ingrediente.peso = ingredientes.peso;
+                ingrediente.calorias = ingredientes.calorias;
+            } else
+            {
+                _context.Ingredientes.Add(ingredientes);
             }
 
-            _context.Ingredientes.Add(ingredientes);
             await _context.SaveChangesAsync();
 
             return new JsonResult(new Resposta(1, "Sucesso"));

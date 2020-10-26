@@ -25,10 +25,15 @@ namespace ApiTcc.Controllers
         [HttpGet]
         public JsonResult GetPratos()
         {
-            var pratos = _context.Pratos;
+            var pratos = _context.Pratos.OrderBy(p => p.nome);
             foreach (Pratos prato in pratos)
             {
+                if (prato.fotobin != null)
+                    prato.foto = Convert.ToBase64String(prato.fotobin);
+
                 prato.Ingredientes = GetIngredientes(prato);
+
+                prato.fotobin = null;
             }
 
             return new JsonResult(pratos);
@@ -39,7 +44,14 @@ namespace ApiTcc.Controllers
         [Route("ListaPratos")]
         public JsonResult ListaPratos()
         {
-            var pratos = _context.Pratos.Select(prato => new Pratos {pratoID = prato.pratoID,nome = prato.nome});
+            var pratos = _context.Pratos.Select(prato => new Pratos {pratoID = prato.pratoID,nome = prato.nome}).OrderBy(p => p.nome);
+            foreach (var prato in pratos)
+            {
+                if (prato.fotobin != null)
+                   prato.foto = Convert.ToBase64String(prato.fotobin);
+
+                prato.fotobin = null;
+            }
             return new JsonResult(pratos);
         }
 
@@ -50,7 +62,14 @@ namespace ApiTcc.Controllers
             var pratos = _context.Pratos.Where(p => p.pratoID == id).ToList();
 
             if (pratos != null && pratos.Count > 0)
+            {
                 pratos[0].Ingredientes = GetIngredientes(pratos[0]);
+
+                if (pratos[0].fotobin != null)
+                    pratos[0].foto = Convert.ToBase64String(pratos[0].fotobin);
+
+                pratos[0].fotobin = null;
+            }
 
             return new JsonResult(pratos);
         }
@@ -68,15 +87,19 @@ namespace ApiTcc.Controllers
                 _prato.modopreparo = pratos.modopreparo;
 
                 if (pratos.video != null)
-                  _prato.video = pratos.video;
+                    _prato.video = pratos.video;
 
                 if (pratos.foto != null)
-                    _prato.foto = pratos.foto;
+                    _prato.fotobin = Convert.FromBase64String(pratos.foto);
 
                 _prato.pratos_Ingredientes.Clear();
                 _prato.pratos_Ingredientes = pratos.pratos_Ingredientes;
-            } else
+            }
+            else
             {
+                if (pratos.foto != null)
+                   pratos.fotobin = Convert.FromBase64String(pratos.foto);
+
                 _context.Pratos.Add(pratos);
             }
 
@@ -89,7 +112,7 @@ namespace ApiTcc.Controllers
         [HttpDelete("{id}")]
         public async Task<JsonResult> DeletePratos(int id)
         {
-            var pratos = await _context.Pratos.FindAsync(id);
+            var pratos = _context.Pratos.Where(p => p.pratoID == id).Include(p => p.pratos_Ingredientes).FirstOrDefault();
             if (pratos == null)
             {
                 return new JsonResult(new Resposta(2, "Prato não encontrado"));

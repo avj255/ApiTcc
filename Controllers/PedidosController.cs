@@ -41,6 +41,7 @@ namespace ApiTcc.Controllers
                 pedido.pratoObj = _context.Pratos.First(p => p.pratoID == pedido.prato);
                 pedido.pratoObj.foto = null;
                 pedido.pratoObj.video = null;
+                pedido.pratoObj.fotobin = null;
             }
 
             return new JsonResult(pedidos);

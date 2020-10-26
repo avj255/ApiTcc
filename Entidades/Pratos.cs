@@ -16,7 +16,9 @@ namespace ApiTcc.Entidades
         public double valor { get; set; }
         public string modopreparo { get; set; }
         public string video { get; set; }
+        [NotMapped]
         public string foto { get; set; }
+        public byte[] fotobin { get; set; }
         public virtual ICollection<Pratos_Ingredientes> pratos_Ingredientes { get; set; }
         public List<Ingredientes> Ingredientes { get; set; }
     }
