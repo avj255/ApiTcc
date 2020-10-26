@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiTcc.Data;
 using ApiTcc.Entidades;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ApiTcc.Controllers
 {
@@ -43,6 +44,31 @@ namespace ApiTcc.Controllers
             }
 
             return new JsonResult(pedidos);
+        }
+
+        // GET: api/Pedidos/PratosMaisPedido
+        [HttpGet]
+        [Route("PratosMaisPedido")]
+        public JsonResult GetPratosMaisPedidos()
+        {
+
+            List<Pedidos> pedidos = _context.Pedidos.GroupBy(r => new { r.prato }).Select(g => new Pedidos { quantidade = g.Sum(c => c.quantidade), prato = g.Key.prato }).OrderByDescending(i => i.quantidade).Take(5).ToList();
+
+            foreach (Pedidos pi in pedidos)
+            {
+                pi.pratoObj = _context.Pratos.Where(x => x.pratoID == pi.prato).Select(y => new Pratos { nome = y.nome }).FirstOrDefault();
+
+            }
+
+            return new JsonResult(pedidos);
+        }
+
+        // GET: api/Pedidos/Situacoes
+        [HttpGet]
+        [Route("Situacoes")]
+        public JsonResult GetSituacoes()
+        {
+            return new JsonResult(_context.Pedidos.GroupBy(r => new { r.situacao }).Select(g => new Pedidos { quantidade = g.Count(), situacao = g.Key.situacao }).OrderByDescending(i => i.quantidade).ToList());
         }
 
         // POST: api/Pedidos
