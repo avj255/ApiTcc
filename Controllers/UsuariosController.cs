@@ -45,16 +45,33 @@ namespace ApiTcc.Controllers
         [Produces("application/json")]
         public async Task<JsonResult> PostUsuarios(Usuarios usuario)
         {
-            if (_context.Usuarios.Any(e => e.usuario == usuario.usuario))
-            {
-                return new JsonResult(new Resposta(2, "Este usuário já existe"));
-            }
+            var _Usuario = _context.Usuarios.FirstOrDefault(e => e.userID == usuario.userID);
 
-            usuario.senha = Criptografia.criptografar(usuario.senha);
-            _context.Usuarios.Add(usuario);
+            if (_Usuario != null)
+            {
+                if (usuario.usuario != _Usuario.usuario)
+                {
+                    if (_context.Usuarios.Any(e => e.usuario == usuario.usuario))
+                    {
+                        return new JsonResult(new Resposta(2, "Este usuário já existe"));
+                    }
+                }
+
+                _Usuario.nome    = usuario.nome;
+                _Usuario.usuario = usuario.usuario;
+                _Usuario.cpf     = usuario.cpf;
+                _Usuario.email   = usuario.email;
+            }
+            else
+            {
+                usuario.senha = Criptografia.criptografar(usuario.senha);
+                _context.Usuarios.Add(usuario);
+            }     
+          
             await _context.SaveChangesAsync();
             return new JsonResult(new Resposta(1, usuario.userID.ToString()));
         }
+
 
         [HttpPost]
         [Route("AlterarSenha")]
