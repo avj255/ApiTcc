@@ -40,6 +40,16 @@ namespace ApiTcc.Controllers
               return new JsonResult(new RespostaLogin(false));
         }
 
+        [HttpGet("{id}")]
+        public JsonResult GetUsuario(int id)
+        {
+            Usuarios usu = _context.Usuarios.FirstOrDefault(_usuario => _usuario.userID == id);
+            if (usu != null)
+                return new JsonResult(usu);
+            else
+                return new JsonResult(false);
+        }
+
 
         [HttpPost]
         [Route("Cadastro")]
