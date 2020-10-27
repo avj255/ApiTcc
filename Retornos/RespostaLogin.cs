@@ -17,10 +17,12 @@ namespace ApiTcc.Retornos
         public string usuario { get; set; }
         public string nome { get; set; }
         public int administrador { get; set; }
+        public string cpf { get; set; }
+        public string email { get; set; }
 
         public RespostaLogin(){}
 
-        public RespostaLogin(bool sucessoLogin, int userID = 0, string usuario = null, string nome = null, int administrador = 0)
+        public RespostaLogin(bool sucessoLogin, int userID = 0, string usuario = null, string nome = null, int administrador = 0, string cpf = null, string email = null)
         {
             if (sucessoLogin)
             {
@@ -29,6 +31,8 @@ namespace ApiTcc.Retornos
                 this.usuario = usuario;
                 this.nome = nome;
                 this.administrador = administrador;
+                this.cpf = cpf;
+                this.email = email;
                 descricao = "Sucesso";
             }
             else

@@ -35,21 +35,10 @@ namespace ApiTcc.Controllers
         {
            Usuarios usu = _context.Usuarios.FirstOrDefault(_usuario => _usuario.usuario == usuario.usuario && _usuario.senha == Criptografia.criptografar(usuario.senha));
            if (usu != null)
-              return new JsonResult(new RespostaLogin(true, usu.userID, usu.usuario, usu.nome, usu.administrador));
+              return new JsonResult(new RespostaLogin(true, usu.userID, usu.usuario, usu.nome, usu.administrador, usu.cpf , usu.email));
            else
               return new JsonResult(new RespostaLogin(false));
         }
-
-        [HttpGet("{id}")]
-        public JsonResult GetUsuario(int id)
-        {
-            Usuarios usu = _context.Usuarios.FirstOrDefault(_usuario => _usuario.userID == id);
-            if (usu != null)
-                return new JsonResult(usu);
-            else
-                return new JsonResult(false);
-        }
-
 
         [HttpPost]
         [Route("Cadastro")]
