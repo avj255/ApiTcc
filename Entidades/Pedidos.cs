@@ -23,5 +23,7 @@ namespace ApiTcc.Entidades
 
         [NotMapped]
         public Pratos pratoObj { get; set; }
+        [NotMapped]
+        public string nomeUsuario { get; set; }
     }
 }

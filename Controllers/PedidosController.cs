@@ -47,6 +47,79 @@ namespace ApiTcc.Controllers
             return new JsonResult(pedidos);
         }
 
+        [HttpGet]
+        [Route("PedidosAbertos")]
+        public JsonResult GetPedidosAbertos()
+        {
+            var pedidos = _context.Pedidos.Where(p => p.situacao == 1).ToList();
+            foreach (Pedidos pedido in pedidos)
+            {
+                //pedido.pratoObj = _context.Pratos.Where(v => v.pratoID == pedido.prato).Select(p => new Pratos { pratoID = p.pratoID, nome = p.nome}).FirstOrDefault();
+                pedido.pratoObj = _context.Pratos.First(p => p.pratoID == pedido.prato);
+                pedido.pratoObj.foto = null;
+                pedido.pratoObj.video = null;
+                pedido.pratoObj.fotobin = null;
+
+                pedido.nomeUsuario = _context.Usuarios.Where(p => p.userID == pedido.usuario).FirstOrDefault().nome;
+            }
+
+            return new JsonResult(pedidos);
+        }
+
+        [HttpGet]
+        [Route("PedidosProducao")]
+        public JsonResult GetPedidosProducao()
+        {
+            var pedidos = _context.Pedidos.Where(p => p.situacao == 2).ToList();
+            foreach (Pedidos pedido in pedidos)
+            {
+                pedido.pratoObj = _context.Pratos.First(p => p.pratoID == pedido.prato);
+                pedido.pratoObj.foto = null;
+                pedido.pratoObj.video = null;
+                pedido.pratoObj.fotobin = null;
+
+                pedido.nomeUsuario = _context.Usuarios.Where(p => p.userID == pedido.usuario).FirstOrDefault().nome;
+            }
+
+            return new JsonResult(pedidos);
+        }
+
+        [HttpGet]
+        [Route("PedidosFinalizados")]
+        public JsonResult GetPedidosFinalizados()
+        {
+            var pedidos = _context.Pedidos.Where(p => p.situacao == 3).ToList();
+            foreach (Pedidos pedido in pedidos)
+            {
+                pedido.pratoObj = _context.Pratos.First(p => p.pratoID == pedido.prato);
+                pedido.pratoObj.foto = null;
+                pedido.pratoObj.video = null;
+                pedido.pratoObj.fotobin = null;
+
+                pedido.nomeUsuario = _context.Usuarios.Where(p => p.userID == pedido.usuario).FirstOrDefault().nome;
+            }
+
+            return new JsonResult(pedidos);
+        }
+
+        [HttpGet]
+        [Route("PedidosCancelados")]
+        public JsonResult GetPedidosCancelados()
+        {
+            var pedidos = _context.Pedidos.Where(p => p.situacao == 4).ToList();
+            foreach (Pedidos pedido in pedidos)
+            {
+                pedido.pratoObj = _context.Pratos.First(p => p.pratoID == pedido.prato);
+                pedido.pratoObj.foto = null;
+                pedido.pratoObj.video = null;
+                pedido.pratoObj.fotobin = null;
+
+                pedido.nomeUsuario = _context.Usuarios.Where(p => p.userID == pedido.usuario).FirstOrDefault().nome;
+            }
+
+            return new JsonResult(pedidos);
+        }
+
         // GET: api/Pedidos/PratosMaisPedido
         [HttpGet]
         [Route("PratosMaisPedido")]
@@ -77,6 +150,22 @@ namespace ApiTcc.Controllers
         public async Task<JsonResult> PostPedidos(Pedidos pedidos)
         {
             _context.Pedidos.Add(pedidos);
+
+            await _context.SaveChangesAsync();
+
+            return new JsonResult(new Resposta(1, "Sucesso"));
+        }
+
+        [HttpPost]
+        [Route("AlteraSituacao")]
+        public async Task<JsonResult> AlteraSituacao(Pedidos pedido)
+        {
+            var ped = _context.Pedidos.Where(p => p.pedidoID == pedido.pedidoID).FirstOrDefault();
+
+            if (ped != null)
+            {
+                ped.situacao = pedido.situacao;
+            }
 
             await _context.SaveChangesAsync();
 
