@@ -31,13 +31,17 @@ namespace ApiTcc.Controllers
         [HttpPost]
         [Route("Login")]
         [Produces("application/json")]
-        public JsonResult GetUsuarios(Usuarios usuario)
+        public async Task<JsonResult> GetUsuarios(Usuarios usuario)
         {
-           Usuarios usu = _context.Usuarios.FirstOrDefault(_usuario => _usuario.usuario == usuario.usuario && _usuario.senha == Criptografia.criptografar(usuario.senha));
-           if (usu != null)
-              return new JsonResult(new RespostaLogin(true, usu.userID, usu.usuario, usu.nome, usu.administrador, usu.cpf , usu.email));
-           else
-              return new JsonResult(new RespostaLogin(false));
+            Usuarios usu = _context.Usuarios.FirstOrDefault(_usuario => _usuario.usuario == usuario.usuario && _usuario.senha == Criptografia.criptografar(usuario.senha));
+            if (usu != null)
+            {
+                usu.token = usuario.token;
+                await _context.SaveChangesAsync();
+                return new JsonResult(new RespostaLogin(true, usu.userID, usu.usuario, usu.nome, usu.administrador, usu.cpf, usu.email));
+            }
+            else
+                return new JsonResult(new RespostaLogin(false));
         }
 
         [HttpPost]
@@ -71,7 +75,6 @@ namespace ApiTcc.Controllers
             await _context.SaveChangesAsync();
             return new JsonResult(new Resposta(1, usuario.userID.ToString()));
         }
-
 
         [HttpPost]
         [Route("AlterarSenha")]
