@@ -78,7 +78,7 @@ namespace ApiTcc.Controllers
         [HttpPost]
         public async Task<JsonResult> PostPratos(Pratos pratos)
         {
-            var _prato = _context.Pratos.FirstOrDefault(e => e.nome == pratos.nome);
+            var _prato = _context.Pratos.FirstOrDefault(e => e.pratoID == pratos.pratoID);
 
             if (_prato != null)
             {
