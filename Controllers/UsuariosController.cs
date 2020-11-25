@@ -64,6 +64,11 @@ namespace ApiTcc.Controllers
             }
             else
             {
+                if (_context.Usuarios.Any(e => e.usuario == usuario.usuario))
+                {
+                    return new JsonResult(new Resposta(2, "Este usuário já existe"));
+                }
+
                 usuario.senha = Criptografia.criptografar(usuario.senha);
                 _context.Usuarios.Add(usuario);
             }     
